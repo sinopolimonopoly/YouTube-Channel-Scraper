@@ -26,12 +26,6 @@ def get_video_ids(playlist_id,max_results):
 
         res = requests.get(url).json()
         for item in res['items']:
-            
-            thumbnail_url = item['snippet']['thumbnails']['default']['url']
-            title = item['snippet']['title']
-            if "default_live.jpg" in thumbnail_url or "🔴" in title:
-                continue
-
             video_id = item['snippet']['resourceId']['videoId']
             video_ids.append(video_id)
         
@@ -40,11 +34,4 @@ def get_video_ids(playlist_id,max_results):
         if not next_page_token:
             break
 
-        counter += 1
-
-        if counter > 50:
-           break
-
     return video_ids
-
-

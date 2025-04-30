@@ -8,7 +8,7 @@ load_dotenv()
 api_key = os.getenv("API_KEY")
 
 
-def get_videos_info(video_ids, max_duration=False):
+def get_videos_info(video_ids):
     videos = defaultdict(lambda: defaultdict(dict))
 
     for i in range(0, len(video_ids), 50):
@@ -18,40 +18,34 @@ def get_videos_info(video_ids, max_duration=False):
         res = requests.get(url).json()
 
         for item in res['items']:
-            raw_duration = item['contentDetails']['duration'].replace("PT", "")
-
-            if max_duration:
-                processed_duration = process_duration(raw_duration, item)
-
-                if processed_duration > max_duration:
-                    continue
-
             # Get video information
             # Snippet
             video_id = item['id']
             title = item['snippet']['title']
             upload_date = item['snippet']['publishedAt'][0:10]
 
+            # Content Details
+            raw_duration = item['contentDetails']['duration'].replace("PT", "")
+            processed_duration = process_duration(raw_duration, item)
+
+
             # Statistics
             view_count = item['statistics']['viewCount']
             like_count = item['statistics']['likeCount']
             comment_count = item['statistics']['commentCount']
 
-            videos[video_id]["Information"]["Title"] = title
-            videos[video_id]["Information"]["Upload Date"] = upload_date
+            # Assign information to dictionary
+            videos[video_id]["Title"] = title
+            videos[video_id]["Upload Date"] = upload_date
 
-            if max_duration:
-                videos[video_id]["Information"]["Duration"] = {"min_sec": raw_duration, "secs" : processed_duration}
+            videos[video_id]["Duration"] = raw_duration
+            videos[video_id]["Duration in s"] = processed_duration    
 
-            else:
-                videos[video_id]["Information"]["Duration"] = raw_duration
-            
-            videos[video_id]["Statistics"]["View Count"] = view_count
-            videos[video_id]["Statistics"]["Like Count"] = like_count
-            videos[video_id]["Statistics"]["Comment Count"] = comment_count
+            videos[video_id]["View Count"] = view_count
+            videos[video_id]["Like Count"] = like_count
+            videos[video_id]["Comment Count"] = comment_count
         
     return videos
-
 
 def process_duration(raw_duration, vid_item):
 
