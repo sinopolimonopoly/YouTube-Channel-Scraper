@@ -16,3 +16,4 @@ def output_info(video_info, max_duration):
                     f"{k:<15} {v["Information"]["Title"]:<80} {v["Information"]["Upload Date"]:<15} {v["Information"]["Duration"]:<13} "
                     f"{v["Statistics"]["View Count"]:<10} {v["Statistics"]["Like Count"]:<10} {v["Statistics"]["Comment Count"]:<10}" 
                 )
+            

@@ -11,3 +11,4 @@ def get_uploads_playlist_id(channel_id):
     res = requests.get(url).json()
     playlist_id = res['items'][0]['contentDetails']['relatedPlaylists']['uploads']
     return playlist_id
+

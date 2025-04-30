@@ -78,3 +78,4 @@ def process_duration(raw_duration, vid_item):
         print(f"ValueError!")
         print(f"Video: {vid_item}")
         raise e
+    
