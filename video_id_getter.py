@@ -22,7 +22,7 @@ def get_video_ids(playlist_id, max_results=50):
         # With the playlist ID, retrieve the snippet for a search of 50 (max_results) videos
         # The request will continue to update and gather new videos beyond the first 50 with the page token
         # Note that the search is now for playlistItems
-        url = f"https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults={max_results}&playlistId={playlist_id}&key={api_key}"
+        url = f"https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults={max_results}&playlistId={playlist_id[0]}&key={api_key}"
 
         # The result will contain a nextPageToken key if there is another page of results to fetch
         # On the first run of the loop, next_page_token is undefined, so this will skip

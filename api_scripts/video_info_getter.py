@@ -4,6 +4,8 @@ from collections import defaultdict
 import requests
 import os
 
+from helper_functions import process_duration
+
 load_dotenv()
 api_key = os.getenv("API_KEY")
 
@@ -82,6 +84,7 @@ def get_videos_info(video_ids):
                 # Dictionary addition of one video iteration:
                 # {"dQw4w9WgXcQ": {"Title": "Rick Astley - Never Gonna Give You Up (Official Music Video)", "Upload Date": "2009-10-25", ...}, ...}
             
+            # Error handling if nonexistent key is pulled  from
             except KeyError as e:
                 print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 print(e)
