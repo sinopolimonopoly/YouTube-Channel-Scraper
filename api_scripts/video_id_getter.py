@@ -39,7 +39,6 @@ def get_video_ids(playlists, max_results=50):
                 # Live streams are weird, and might want to be excluded
                 thumbnail_url = item['snippet']['thumbnails']['default']['url']
                 title = item['snippet']['title'].lower()
-                views = item['snippet']
                 # Streams have different thumbnail urls (most times)
                 if "default_live.jpg" in thumbnail_url or ("live" in title and "stream" in title):
                     continue # Skip over the current video
