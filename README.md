@@ -1,1 +1,31 @@
-Youtube Channel Video Scraper
+# Youtube Channel Video Scraper
+
+## What this is
+A series of Python scripts to fetch a list of a YouTube Channel's long form videos and/or shorts, along with their upload date, durations, view, like and comment counts. 
+
+## How it's done
+Uses a YouTube Data V3 API key created with Google Cloud Console project.  
+The API key is used to make requests and fetch json results, which are then parsed with Python to retrieve and structure the desired information.
+
+### Steps
+1. Specify the handle of the YouTube channel
+2. Specify the desired type of videos: Long form (regular videos), Shorts or all
+3. Retrieve the channel ID of the handle
+4. Retrieve the playlist ID of the channel's uploaded videos and/or shorts
+5. Fetch the video ID of all the videos in the playlist(s)
+6. Fetch information for each video using its ID
+7. Convert the created Python dictionary to a csv file
+
+## Final Data Structure
+Dictionary of dictionaries  
+{"Video ID 1": {"Title": str, "Upload Date": str, "Video Type": categorical, "Duration": str, "Duration in s": int, "View Count": int, "Like Count": int, "Comment Count": int}, "Video ID 2": {...}, ...}  
+
+## How to Use
+1. Clone this repo
+2. Create a new project on console.cloud.google.com
+3. In APIs & Services, find YouTube Data API V3 and create credentials for it
+4. Choose public data and create your API key
+5. In the cloned repo, create a file ".env" on the same level as the README
+6. Set API_KEY = "your API key" in the .env file
+7. Run the main.py file
+8. Find and download the csv file created in the output scripts
