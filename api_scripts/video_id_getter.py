@@ -37,8 +37,11 @@ def get_video_ids(playlists, max_results=50):
             # Error handling for API Call
             # If a channel has no shorts or long form videos, the 
             if 'error' in data:
+                # Get video type that failed
                 current_type = "Long Form" if vid_type == "videos" else "Shorts" if vid_type == "shorts" else "Invalid Video Type"
                 print(f"Can't retrieve {current_type}. The desired playlist may be empty")
+
+                # Move on to next video type (next iteration in loop)
                 break
 
             # Now, we need to iterate through all of the items in the search in order to look at each videos

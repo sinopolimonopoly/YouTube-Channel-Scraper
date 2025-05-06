@@ -40,4 +40,4 @@ if bool(video_info) == True:
     create_video_csv(videos_by_date, handle, video_type)
 
 else:
-    print("No csv file created. Empty dictionary")
+    print(f"No output. {video_type} request for channel {handle} yielded empty dictionary")
