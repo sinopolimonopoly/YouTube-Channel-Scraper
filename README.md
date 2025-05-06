@@ -16,6 +16,21 @@ The API key is used to make requests and fetch json results, which are then pars
 6. Fetch information for each video using its ID
 7. Convert the created Python dictionary to a csv file
 
+## Retrieved Fields
+|Field       |Type      |Example     |
+|------------|----------|------|
+|Video ID  |String    | CACAmH4r1fw |
+|Title | String | Bowling Trick Shots \| Dude Perfect |
+|Upload Date |  String | 	2014-06-02 |
+|Video Type | Categorical | Long Form	|
+|Duration | String | 6M1S	|
+|Duration in s| Int | 361 |
+|View count| Int | 101744166 |	
+|Like Count | Int | 681701 |
+|Comment Count | Int | 44255 |
+
+Note that likes and comments may be disabled on a video. In this case, the fields will contain "Disabled" instead of an integer
+
 ## Final Data Structure
 Dictionary of dictionaries  
 {"Video ID 1": {"Title": str, "Upload Date": str, "Video Type": categorical, "Duration": str, "Duration in s": int, "View Count": int, "Like Count": int, "Comment Count": int}, "Video ID 2": {...}, ...}  
