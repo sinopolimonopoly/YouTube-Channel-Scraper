@@ -17,7 +17,7 @@ def get_video_ids(playlists, max_results=50):
     # To paginate through results if there are more than 50 items in the playlist
     next_page_token = None
 
-    for type, playlist in playlists.items():
+    for vid_type, playlist in playlists.items():
         type_ids = []
         while True:
             # With the playlist ID, retrieve the snippet for a search of 50 (max_results) videos
@@ -33,6 +33,14 @@ def get_video_ids(playlists, max_results=50):
 
             res = requests.get(url)
             data = res.json()
+            
+            # Error handling for API Call
+            # If a channel has no shorts or long form videos, the 
+            if 'error' in data:
+                current_type = "Long Form" if vid_type == "videos" else "Shorts" if vid_type == "shorts" else "Invalid Video Type"
+                print(f"Can't retrieve {current_type}. The desired playlist may be empty")
+                break
+
             # Now, we need to iterate through all of the items in the search in order to look at each videos
             for item in data['items']:
 
@@ -56,6 +64,6 @@ def get_video_ids(playlists, max_results=50):
             if not next_page_token:
                 break
 
-        video_ids[type] = type_ids
+        video_ids[vid_type] = type_ids
 
     return video_ids
