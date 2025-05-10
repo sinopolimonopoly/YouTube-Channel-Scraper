@@ -6,7 +6,7 @@ from output_scripts.info_outputter import output_info
 from output_scripts.dict_to_csv import create_video_csv
 
 # Channel to scrape
-handle = "AsumSaus"
+handle = "jonbois"
 # videos (long form), shorts, all_uploads 
 video_type = "all_uploads"
 
