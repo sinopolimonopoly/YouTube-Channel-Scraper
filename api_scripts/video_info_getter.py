@@ -73,7 +73,7 @@ def get_videos_info(video_ids):
                     videos[video_id]["Title"] = title
                     videos[video_id]["Upload Date"] = upload_date
                     videos[video_id]["Numeric Date"] = int("".join(upload_date.split('-')))
-                    video_type = "Long Form" if (list_type == "videos") else "Short" if (list_type == "shorts") else "?"
+                    video_type = "Long Form" if (list_type == "videos") else "Short" if (list_type == "shorts") else "Livestream" if (list_type == "livestreams") else "?"
                     videos[video_id]["Video Type"] = video_type
 
                     videos[video_id]["Duration"] = raw_duration
@@ -102,11 +102,12 @@ def process_duration(raw_duration, vid_item):
         duration = raw_duration.replace("PT", "")
 
         if "D" in duration: #Video is long af (over 24 hours)
-            return duration
+            day_idx = duration.index("D")
+            day_seconds = int(duration[0:day_idx]) * 24 * 60 * 60
 
         if "H" in duration:
             hour_idx = duration.index("H")
-            hr_seconds = int(duration[0:hour_idx]) * 60 * 60
+            hr_seconds = int(duration[day_idx+1:hour_idx]) * 60 * 60
         
         else: 
             hr_seconds = 0

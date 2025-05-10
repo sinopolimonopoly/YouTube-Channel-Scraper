@@ -35,7 +35,7 @@ def get_video_ids(playlists, max_results=50):
             data = res.json()
             
             # Error handling for API Call
-            # If a channel has no shorts or long form videos, the 
+            # If a channel has no shorts or long form videos, the request will yield an error
             if 'error' in data:
                 # Get video type that failed
                 current_type = "Long Form" if vid_type == "videos" else "Shorts" if vid_type == "shorts" else "Invalid Video Type"
@@ -47,13 +47,14 @@ def get_video_ids(playlists, max_results=50):
             # Now, we need to iterate through all of the items in the search in order to look at each videos
             for item in data['items']:
 
-                # Live streams are weird, and might want to be excluded
-                thumbnail_url = item['snippet']['thumbnails']['default']['url']
-                title = item['snippet']['title'].lower()
-                # Streams have different thumbnail urls (most times)
-                if "default_live.jpg" in thumbnail_url or ("live" in title and "stream" in title):
-                    continue # Skip over the current video
-                
+                if vid_type == "videos" or vid_type == "shorts":
+                    # Live streams are weird, and might want to be excluded
+                    # https://www.youtube.com/watch?v=7jIkNN_OK1E for example
+                    thumbnail_url = item['snippet']['thumbnails']['default']['url']
+                    # Streams have different thumbnail urls (most times)
+                    if "default_live.jpg" in thumbnail_url:
+                        continue # Skip over the current video
+                    
                 # Retrieve the videoID value within the snippet and resourceId objects
                 video_id = item['snippet']['resourceId']['videoId']
                 # Add the video id to the list

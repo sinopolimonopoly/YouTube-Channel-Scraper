@@ -1,14 +1,14 @@
 from api_scripts.channel_id_getter import get_channel_id
 from api_scripts.uploads_playlist_getter import get_uploads_playlist_id
 from api_scripts.video_id_getter import get_video_ids
-from api_scripts.new_info_getter import get_videos_info
+from api_scripts.video_info_getter import get_videos_info
 from output_scripts.info_outputter import output_info
 from output_scripts.dict_to_csv import create_video_csv
 
 # Channel to scrape
-handle = "jonbois"
-# videos (long form), shorts, all_uploads 
-video_type = "all_uploads"
+handle = "arcadianfish"
+# videos (long form), shorts, livestreams, all_uploads 
+video_type = "videos"
 
 # Get channel ID
 channel_id = get_channel_id(handle)
@@ -17,10 +17,12 @@ channel_id = get_channel_id(handle)
 # Get playlist ID of the channel's videos
 channel_uploads_playlist = get_uploads_playlist_id(channel_id, video_type)
 # Output -> {'video type': 'playlist ID'}
+print(channel_uploads_playlist)
 
-# Get the information of all the videos in the playlist(s)
+# Get the ids of all the videos in the playlist(s)
 video_ids = get_video_ids(channel_uploads_playlist)
 # Output {'video type': [List of ids]}
+print(video_ids)
 
 # Get the information for each video
 video_info = get_videos_info(video_ids)
@@ -28,6 +30,8 @@ video_info = get_videos_info(video_ids)
 
 # Sorting videos by date uploaded
 # Needed because shorts and uploads are separated
+print(video_info.items())
+# item is a key value pair, index 1 is the value, 'Numeric Date' is the desired sorting attribute
 videos_by_date = dict(sorted(video_info.items(), key = lambda item: item[1]['Numeric Date'], reverse=True))
 
 
