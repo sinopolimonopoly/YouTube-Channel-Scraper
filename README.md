@@ -30,7 +30,7 @@ The API key is used to make requests and fetch json results, which are then pars
 |Comment Count | Int | 44255 |
 
 * Note that likes and comments may be disabled on a video. In this case, the fields will contain "Disabled" instead of an integer.
-* Note that currently ongoing livestreams will not have an integer duration
+* Note that currently ongoing livestreams will not have an integer duration.
 
 
 ## Final Data Structure
