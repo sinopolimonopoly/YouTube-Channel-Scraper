@@ -1,5 +1,5 @@
 from api_scripts.channel_id_getter import get_channel_id
-from api_scripts.channel_info_getter import get_channel_info
+from api_scripts.info.channel_info_getter import get_channel_info
 
 # Channel to get info for
 handle = "AsumSaus"

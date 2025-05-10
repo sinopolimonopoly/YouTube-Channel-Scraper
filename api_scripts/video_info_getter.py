@@ -38,6 +38,7 @@ def get_videos_info(video_ids):
             # Retreive contentDetails, snippet and statistics parts for different attributes of the video
             # Pass the list of ids to search for
             url = f"https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet,statistics&id={comma_separated_ids}&key={api_key}"
+            print(url)
             res = requests.get(url)
             data = res.json()
 
@@ -50,8 +51,18 @@ def get_videos_info(video_ids):
                     upload_date = item['snippet']['publishedAt'][0:10]
 
                     # Content Details
-                    raw_duration = item['contentDetails']['duration'].replace("PT", "")
-                    processed_duration = process_duration(raw_duration, item)
+                    # If livestream is taking place right now
+                    if item['snippet']['liveBroadcastContent'] == "live":
+                        raw_duration = "Currently live"
+                        processed_duration = "Currently live"
+
+                    # skipping over upcoming livestreams
+                    elif item['snippet']['liveBroadcastContent'] == "upcoming":
+                        continue
+
+                    else:
+                        raw_duration = item['contentDetails']['duration'].replace("P", "").replace("T", "")
+                        processed_duration = process_duration(raw_duration, item)
 
                     # Statistics
                     view_count = item['statistics']['viewCount']
@@ -86,7 +97,7 @@ def get_videos_info(video_ids):
                     # Dictionary addition of one video iteration:
                     # {"dQw4w9WgXcQ": {"Title": "Rick Astley - Never Gonna Give You Up (Official Music Video)", "Upload Date": "2009-10-25", ...}, ...}
                 
-                # Error handling if nonexistent key is pulled  from
+                # Error handling if nonexistent key is pulled from
                 except KeyError as e:
                     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                     print(e)
@@ -97,13 +108,18 @@ def get_videos_info(video_ids):
 
 # To convert duration (2M30S) to seconds (150S) 
 def process_duration(raw_duration, vid_item):
+    print(raw_duration)
 
     try:  
-        duration = raw_duration.replace("PT", "")
+        duration = raw_duration.replace("P", "").replace("T", "")
 
         if "D" in duration: #Video is long af (over 24 hours)
             day_idx = duration.index("D")
             day_seconds = int(duration[0:day_idx]) * 24 * 60 * 60
+
+        else:
+            day_seconds = 0
+            day_idx = -1
 
         if "H" in duration:
             hour_idx = duration.index("H")
@@ -128,7 +144,7 @@ def process_duration(raw_duration, vid_item):
         else:
             sec_seconds = 0
 
-        duration_in_s = hr_seconds + min_seconds + sec_seconds
+        duration_in_s = day_seconds + hr_seconds + min_seconds + sec_seconds
 
         return duration_in_s
 
