@@ -38,7 +38,6 @@ def get_videos_info(video_ids):
             # Retreive contentDetails, snippet and statistics parts for different attributes of the video
             # Pass the list of ids to search for
             url = f"https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet,statistics&id={comma_separated_ids}&key={api_key}"
-            print(url)
             res = requests.get(url)
             data = res.json()
 
@@ -108,7 +107,6 @@ def get_videos_info(video_ids):
 
 # To convert duration (2M30S) to seconds (150S) 
 def process_duration(raw_duration, vid_item):
-    print(raw_duration)
 
     try:  
         duration = raw_duration.replace("P", "").replace("T", "")

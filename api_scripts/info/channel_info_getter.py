@@ -10,16 +10,23 @@ api_key = os.getenv("API_KEY")
 
 def get_channel_info(channel_id):
 
-    url = f"https://www.googleapis.com/youtube/v3/channels?part=snippet&id={channel_id}&key={api_key}"
+    url = f"https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&id={channel_id}&key={api_key}"
 
     res = requests.get(url)
     data = res.json()
+    print(data)
 
     channel_info = defaultdict(str)
 
+    # information
     channel_info["Channel Name"] = data['items'][0]['snippet']['title']
     channel_info["Join Date"] = data['items'][0]['snippet']['publishedAt'][0:10]
     channel_info["Description"] = data['items'][0]['snippet']['description']
     channel_info["Handle"] = data['items'][0]['snippet']['customUrl']
+
+    channel_info["Sub Count"] = data['items'][0]['statistics']['subscriberCount']
+    channel_info["View Count"] = data['items'][0]['statistics']['viewCount']
+    channel_info["Video Count"] = data['items'][0]['statistics']['videoCount']
+
 
     print(channel_info)

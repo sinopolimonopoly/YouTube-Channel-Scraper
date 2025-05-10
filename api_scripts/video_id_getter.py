@@ -38,8 +38,8 @@ def get_video_ids(playlists, max_results=50):
             # If a channel has no shorts or long form videos, the request will yield an error
             if 'error' in data:
                 # Get video type that failed
-                current_type = "Long Form" if vid_type == "videos" else "Shorts" if vid_type == "shorts" else "Invalid Video Type"
-                print(f"Can't retrieve {current_type}. The desired playlist may be empty")
+                current_type = "Long Form" if vid_type == "videos" else "Shorts" if vid_type == "shorts" else "Livestreams" if vid_type == "livestreams" else "INVALID VIDEO TYPE"
+                print(f"{vid_type} | Can't retrieve {current_type}. The desired playlist may be empty")
 
                 # Move on to next video type (next iteration in loop)
                 break
