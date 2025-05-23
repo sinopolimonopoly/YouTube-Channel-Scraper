@@ -20,9 +20,11 @@ def get_channel_info(channel_id):
 
     # information
     channel_info["Channel Name"] = data['items'][0]['snippet']['title']
+    channel_info["Handle"] = data['items'][0]['snippet']['customUrl']
     channel_info["Join Date"] = data['items'][0]['snippet']['publishedAt'][0:10]
     channel_info["Description"] = data['items'][0]['snippet']['description']
     channel_info["Handle"] = data['items'][0]['snippet']['customUrl']
+    channel_info["Thumbnail URL"] = data['items'][0]['snippet']['thumbnails']['high']['url']
 
     channel_info["Sub Count"] = data['items'][0]['statistics']['subscriberCount']
     channel_info["View Count"] = data['items'][0]['statistics']['viewCount']

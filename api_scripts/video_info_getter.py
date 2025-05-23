@@ -12,7 +12,7 @@ def get_videos_info(video_ids):
     # Calling videos["Hello"] Will create a new key 'Hello' with a value of an empty dictionary
         # -> {"Hello": {}}
     # Now, we can easily assign a new key to this inner dictionary
-        # videos["Hello"]["key_1"] = "first value" -> {"Hello": {"key_1": "first_key"}}
+        # videos["Hello"]["key_1"] = "first value" -> {"Hello": {"key_1": "first value"}}
     # With this data structure, we can have outer keys as video IDs, which have keys that are 
     # dictionaries containing key-value pairs of the video's attributes
     videos = defaultdict(dict)

@@ -6,14 +6,13 @@ from output_scripts.info_outputter import output_info
 from output_scripts.dict_to_csv import create_video_csv
 
 # Channel to scrape
-handle = "curtisdoingthings"
+handle = "CrashDummiesPodcast"
 # videos (long form), shorts, livestreams, all_uploads 
 video_type = "all_uploads"
 
 # Get channel ID
 channel_id = get_channel_id(handle)
 # Output -> 'channel ID'
-print(channel_id)
 
 # Get playlist ID of the channel's videos
 channel_uploads_playlist = get_uploads_playlist_id(channel_id, video_type)
@@ -22,6 +21,7 @@ channel_uploads_playlist = get_uploads_playlist_id(channel_id, video_type)
 # Get the ids of all the videos in the playlist(s)
 video_ids = get_video_ids(channel_uploads_playlist)
 # Output {'video type': [List of ids]}
+print(video_ids)
 
 # Get the information for each video
 video_info = get_videos_info(video_ids)
