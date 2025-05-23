@@ -6,13 +6,17 @@ from output_scripts.info_outputter import output_info
 from output_scripts.dict_to_csv import create_video_csv
 
 # Channel to scrape
-handle = "CrashDummiesPodcast"
+handle = "CrashDummiesPodcast11234"
 # videos (long form), shorts, livestreams, all_uploads 
 video_type = "all_uploads"
 
 # Get channel ID
 channel_id = get_channel_id(handle)
 # Output -> 'channel ID'
+
+if not channel_id:
+    print(f"No channel found for handle: {handle}")
+    exit()
 
 # Get playlist ID of the channel's videos
 channel_uploads_playlist = get_uploads_playlist_id(channel_id, video_type)
