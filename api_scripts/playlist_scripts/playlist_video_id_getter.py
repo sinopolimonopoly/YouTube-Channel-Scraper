@@ -29,13 +29,10 @@ def get_playlist_video_ids(playlist):
         data = res.json()
         
         # Error handling for API Call
-        # If a channel has no shorts or long form videos, the request will yield an error
         if 'error' in data:
-            # Get video type that failed
             print("Error with api call")
             print(data['error']['message'])
 
-            # Move on to next video type (next iteration in loop)
             return
 
         # Now, we need to iterate through all of the items in the search in order to look at each videos

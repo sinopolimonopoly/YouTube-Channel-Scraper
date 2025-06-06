@@ -21,13 +21,15 @@ def get_playlist_info(playlist):
     playlist_create_date = data['items'][0]["snippet"]["publishedAt"][0:10]
     playlist_channel = data['items'][0]["snippet"]["channelTitle"]
     playlist_video_count = data['items'][0]["contentDetails"]["itemCount"]
+    plist_thumbnail = data['items'][0]['snippet']['thumbnails']['default']['url']
 
     return {
         "title": playlist_title,
         "description": playlist_description,
         "create_date": playlist_create_date,
         "channel" : playlist_channel,
-        "video_count": playlist_video_count
+        "video_count": playlist_video_count,
+        "thumbnail" : plist_thumbnail
         }
     
 
