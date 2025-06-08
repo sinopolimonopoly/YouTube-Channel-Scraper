@@ -15,7 +15,7 @@ def get_channel_id(handle):
     # Type is what we're searching for, the channel
     # q is the search query, in this case, it is the channel handle
     # Key is the API key used to verify the request
-    url = f"https://www.googleapis.com/youtube/v3/search?&part=snippet&type=channel&q={handle}&key={api_key}"
+    url = f"https://www.googleapis.com/youtube/v3/search?&part=snippet&type=channel&maxResults=50&q={handle}&key={api_key}"   
 
     res = requests.get(url)
     data = res.json()
@@ -24,17 +24,27 @@ def get_channel_id(handle):
     # The result is actually a list of search results, but the first will be the one you care about, if you give the exact handle
     # Navigate to the id object of a search result, and extract the value of the channelId key. That will yield the correct channel ID
     for idx, item in enumerate(data['items']):
-        channel_id = item["id"]["channelId"]
-        handle_url = f"https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&id={channel_id}&key={api_key}"
-        res = requests.get(handle_url)
-        channel_data = res.json()
-        data_handle = channel_data['items'][0]['snippet']['customUrl']
+        try:
+            channel_id = item["id"]["channelId"]
+            handle_url = f"https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&id={channel_id}&key={api_key}"
+            res = requests.get(handle_url)
+            channel_data = res.json()
 
-        print("id handle", data_handle)
-        if data_handle.lower().replace ("@", "")== handle.lower():
-            handle_verified = True
-            valid_idx = idx
-            break
+            data_title = channel_data['items'][0]['snippet']['title']
+
+            if " - Topic" in data_title:
+                print("Topic channel found: ", data_title)
+                continue
+
+            data_handle = channel_data['items'][0]['snippet']['customUrl']
+
+            print("id handle", data_handle)
+            if data_handle.lower().replace ("@", "")== handle.lower():
+                handle_verified = True
+                valid_idx = idx
+                break
+        except KeyError:
+            print(channel_data)
 
     
     if handle_verified:

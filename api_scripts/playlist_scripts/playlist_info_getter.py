@@ -16,6 +16,7 @@ def get_playlist_info(playlist):
         print(f"No playlist found with id ${playlist}")
         return
 
+    print(data)
     playlist_title = data['items'][0]["snippet"]["title"]
     playlist_description = data['items'][0]["snippet"]["description"]
     playlist_create_date = data['items'][0]["snippet"]["publishedAt"][0:10]
