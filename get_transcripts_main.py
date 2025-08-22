@@ -10,7 +10,7 @@ video_ids = []
 titles = []
 transcripts = []
 
-with open("output/curtisdoingthings_all_uploads_list.csv", newline='', encoding='utf-8') as f:
+with open("output/maxthemeatguy_shorts_list.csv", newline='', encoding='utf-8') as f:
     reader = csv.DictReader(f)
     for row in reader:
         video_transcript = get_transcript(row["Video ID"])
@@ -20,13 +20,16 @@ with open("output/curtisdoingthings_all_uploads_list.csv", newline='', encoding=
         transcripts.append(video_transcript)
 
         print(row["Title"][0:30] + " - transcript retrieved")
+        print(video_transcript)
+        exit()
+        
 
 
 channel = "curtisdoingthings"
 file_name = channel + "_transcripts.csv"
 
 output_folder = "transcript_output"
-
+   
 file_path = os.path.join(output_folder, file_name)
 
 with open(file_path, 'w', newline='', encoding='utf-8') as transcript_csv:
@@ -42,6 +45,6 @@ with open(file_path, 'w', newline='', encoding='utf-8') as transcript_csv:
 
         writer.writerow([video_id, title, transcript])
 
-
+  
 #print(titles)
 
