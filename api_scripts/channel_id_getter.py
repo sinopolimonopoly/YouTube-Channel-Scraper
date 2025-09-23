@@ -31,6 +31,7 @@ def get_channel_id(handle):
             channel_data = res.json()
 
             data_title = channel_data['items'][0]['snippet']['title']
+            print(data_title)
 
             if " - Topic" in data_title:
                 print("Topic channel found: ", data_title)
@@ -38,8 +39,7 @@ def get_channel_id(handle):
 
             data_handle = channel_data['items'][0]['snippet']['customUrl']
 
-            print("id handle", data_handle)
-            if data_handle.lower().replace ("@", "")== handle.lower():
+            if data_handle.lower().replace("@", "")== handle.lower():
                 handle_verified = True
                 valid_idx = idx
                 break
@@ -49,10 +49,10 @@ def get_channel_id(handle):
     
     if handle_verified:
         channel_id = data['items'][valid_idx]['id']['channelId']
-
+        print(channel_id)
         return channel_id
     
     else:
         print(f"No channel with handle: {handle} found.")
-        "return"
+        return
 

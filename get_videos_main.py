@@ -9,9 +9,9 @@ from output_scripts.info_outputter import output_info
 from output_scripts.dict_to_csv import create_video_csv
 
 # Channel to scrape
-handle = "AsumSaus"
+handle = "MaxTheMeatGuy"
 # videos (long form), shorts, livestreams, all_uploads 
-video_type = "all_uploads"
+video_type = "shorts"
 
 # Get channel ID
 channel_id = get_channel_id(handle)

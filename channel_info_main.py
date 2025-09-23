@@ -2,7 +2,7 @@ from api_scripts.channel_id_getter import get_channel_id
 from api_scripts.info.channel_info_getter import get_channel_info
 
 # Channel to get info for
-handle = "mrfruit"
+handle = "maxthemeatguy"
 
 # Get channel ID
 channel_id = get_channel_id(handle)
