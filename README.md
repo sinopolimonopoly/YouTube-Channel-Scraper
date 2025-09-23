@@ -1,8 +1,16 @@
-# Youtube Channel Video Scraper
+# Youtube Channel Scraper
 
 ## What this is
-A series of Python scripts to fetch a list of a YouTube Channel's long form videos, shorts and livestreams, along with their upload date, durations, view, like and comment counts. 
+A series of Python scripts to fetch 
+- A list of a YouTube Channel's long form videos, shorts and livestreams
+  - Along with their upload date, durations, view, like and comment counts
+  - Done with [YouTube Data API v3](https://developers.google.com/youtube/v3)
+- A brief summary of facts about a channel
+  - Also done with YouTube Data API v3
+- Transcripts for videos
+  - Done with [YouTube Transcript API](https://github.com/jdepoix/youtube-transcript-api)
 
+# Video Retrieval
 ## How it's done
 Uses a YouTube Data V3 API key created with Google Cloud Console project.  
 The API key is used to make requests and fetch json results, which are then parsed with Python to retrieve and structure the desired information.
@@ -30,8 +38,7 @@ The API key is used to make requests and fetch json results, which are then pars
 |Comment Count | Int | 44255 |
 
 * Note that likes and comments may be disabled on a video. In this case, the fields will contain "Disabled" instead of an integer.
-* Note that currently ongoing livestreams will not have an integer duration.
-
+* Note that currently ongoing livestreams will not have an integer duration, and will indicate "Currently live".
 
 ## Final Data Structure
 Dictionary of dictionaries  
@@ -46,3 +53,17 @@ Dictionary of dictionaries
 6. Set API_KEY = "your API key" in the .env file
 7. Run the main.py file
 8. Find and download the csv file created in the output scripts
+
+
+# Transcript Retrieval
+## How It's Done
+A video's transcript can be fetched from a video using it's ID (dQw4w9WgXcQ). Video ID is a field captured by the video scraper scripts. 
+- Note that the transcript is the one viewable on a video through its subtitles
+- Transcripts are also available in different languages
+A transcript is separated into timestamped segments. I made a script to convert the transcript objects with timestamps into a string with all the words of the transcript.
+My primary use for a transcript would be analyzing vocabulary, which only needs the words of the video. 
+
+## Challenges
+Attempting to retrieve all the transcripts of a big batch of videos (>100) will almost certainly result in an IP ban from YouTube. These are difficult to navigate, but making requests in smaller, spaced out groups is a decent solution. 
+
+Last README update: September 23, 2025
