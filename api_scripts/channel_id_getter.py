@@ -8,6 +8,8 @@ api_key = os.getenv("API_KEY")
 
 def get_channel_id(handle):
 
+    handle = handle.replace("@","")
+
     handle_verified = False
 
     # General endpoint is https://www.googleapis.com/youtube/v3/search

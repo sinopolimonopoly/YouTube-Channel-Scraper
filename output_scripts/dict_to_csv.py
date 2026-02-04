@@ -4,11 +4,13 @@ import os
 # Function to create csv (excel) file for all the videos
 def create_video_csv(video_dict, channel, video_type, output_folder="output"):
 
+    print(f"Video csv entered successfully for channel {channel}")
+
     # Make sure destination folder exists
     os.makedirs(output_folder, exist_ok=True)
 
     # Create file name with channel handle
-    file_name = f'{channel}_{'_'.join(video_type.split(" "))}_list.csv'
+    file_name = f"{channel}_{'_'.join(video_type.split(' '))}_list.csv"
 
     # Add path so file knows where to go
     file_path = os.path.join(output_folder, file_name)
@@ -37,3 +39,5 @@ def create_video_csv(video_dict, channel, video_type, output_folder="output"):
 
             # Write new row with all the info
             writer.writerow([video_id, title, upload_date, video_type, duration, duration_in_s, view_count, like_count, comment_count])
+
+    print("End of Video CSV script")

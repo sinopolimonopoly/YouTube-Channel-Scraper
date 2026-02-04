@@ -102,6 +102,9 @@ def get_videos_info(video_ids):
                     print(e)
                     print(f"Video Item: {item}")
                     exit()
+
+
+    print("Video Get ID Function Done Successfully") 
         
     return videos
 
