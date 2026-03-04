@@ -41,3 +41,35 @@ def create_video_csv(video_dict, channel, video_type, output_folder="output"):
             writer.writerow([video_id, title, upload_date, video_type, duration, duration_in_s, view_count, like_count, comment_count])
 
     print("End of Video CSV script")
+    
+def append_video_to_csv(row_dict, handle, video_type, output_folder="output"):
+
+    os.makedirs(output_folder, exist_ok=True)
+
+    file_name = f"{handle}_{'_'.join(video_type.split(' '))}_list.csv"
+    file_path = os.path.join(output_folder, file_name)
+
+    file_exists = os.path.isfile(file_path)
+
+    with open(file_path, 'a', newline='', encoding='utf-8') as csv_file:
+
+        fieldnames = [
+            "Video ID",
+            "Title",
+            "Upload Date"
+            "Numeric Date",
+            "Video Type",
+            "Duration",
+            "Duration in s",
+            "View Count",
+            "Like Count",
+            "Comment Count"
+        ]
+
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+        # Only write header if file does not exist yet
+        if not file_exists:
+            writer.writeheader()
+
+        writer.writerow(row_dict)

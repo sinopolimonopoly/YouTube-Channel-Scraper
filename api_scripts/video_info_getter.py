@@ -4,17 +4,19 @@ from collections import defaultdict
 import requests
 import os
 
+from output_scripts.make_csv_file import append_video_to_csv
+
+
 load_dotenv()
 api_key = os.getenv("API_KEY")
 
-def get_videos_info(video_ids):
+def get_videos_info(video_ids,handle):
     # Defaultdict allows dictionary keys to be created while they are first being assigned
     # Calling videos["Hello"] Will create a new key 'Hello' with a value of an empty dictionary
         # -> {"Hello": {}}
     # Now, we can easily assign a new key to this inner dictionary
         # videos["Hello"]["key_1"] = "first value" -> {"Hello": {"key_1": "first value"}}
-    # With this data structure, we can have outer keys as video IDs, which have keys that are 
-    # dictionaries containing key-value pairs of the video's attributes
+    # With this data structure, we can have outer keys as video IDs, which have keys that are dictionaries containing key-value pairs of the video's attributes
     videos = defaultdict(dict)
 
     for list_type, ids in video_ids.items(): 
@@ -29,7 +31,7 @@ def get_videos_info(video_ids):
             # Also, the list slicing stop index can exceed the length of the list 
             batch = ids[i:i+50]
 
-            # The IDs need to be passed in the api call as a comma separated list. This can be accomplished with the join method
+            # The IDs need to be passed in the api call as a comma separated string. This can be accomplished with the join method
             # Below will product a string of all the IDs in the batch list, separated by commas
             # '|'.join([111, 222, 333, 444]) -> "111|222|333|444"
             comma_separated_ids = ','.join(batch)
@@ -42,45 +44,63 @@ def get_videos_info(video_ids):
             data = res.json()
 
             for item in data['items']:
+
+                # Reset variables every iteration
+                title = None
+                upload_date = None
+                raw_duration = None
+                processed_duration = None
+                view_count = None
+                like_count = None
+                comment_count = None
+
                 try:
                     # Retrieve information from each video
                     # Snippet
-                    video_id = item['id']
-                    title = item['snippet']['title']
-                    upload_date = item['snippet']['publishedAt'][0:10]
+                    snippet = item.get("snippet") or {}
+                    content_details = item.get("contentDetails") or {}
+
+                    video_id = item.get("id")  # id is NOT inside snippet
+                    title = snippet.get("title")
+
+                    published_at = snippet.get("publishedAt")
+                    upload_date = published_at[:10] if published_at else None
+
+                    live_status = snippet.get("liveBroadcastContent")
 
                     # Content Details
-                    # If livestream is taking place right now
-                    if item['snippet']['liveBroadcastContent'] == "live":
+                    if live_status == "live":
                         raw_duration = "Currently live"
                         processed_duration = "Currently live"
 
-                    # skipping over upcoming livestreams
-                    elif item['snippet']['liveBroadcastContent'] == "upcoming":
+                    elif live_status == "upcoming":
                         continue
 
                     else:
-                        raw_duration = item['contentDetails']['duration'].replace("P", "").replace("T", "")
-                        processed_duration = process_duration(raw_duration, item)
+                        duration = content_details.get("duration")
+
+                        if duration:
+                            raw_duration = duration.replace("P", "").replace("T", "")
+                            processed_duration = process_duration(raw_duration, item)
+                        else:
+                            raw_duration = None
+                            processed_duration = None 
 
                     # Statistics
-                    view_count = item['statistics']['viewCount']
-                    # Handling cases where likes and comments are disabled
-                    if "likeCount" in item['statistics']:
-                        like_count = item['statistics']['likeCount']
+                    statistics = item.get("statistics") or {}
 
-                    else:
-                        like_count = "Disabled"
+                    view_count = statistics.get("viewCount")
 
-                    if "commentCount" in item['statistics']:
-                        comment_count = item['statistics']['commentCount']
+                    like_count = statistics.get("likeCount")
+                    comment_count = statistics.get("commentCount")
 
-                    else:
-                        comment_count = "Disabled"
+                    # Handle disabled likes/comments
+                    like_count = like_count if like_count is not None else "Disabled"
+                    comment_count = comment_count if comment_count is not None else "Disabled"
 
                   
                 # Error handling if nonexistent key is pulled from
-                except KeyError as e:
+                except Exception as e:
                     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                     print(e)
                     print(f"Video Item: {item}")
@@ -93,21 +113,28 @@ def get_videos_info(video_ids):
                     like_count = like_count if like_count else None
                     comment_count = comment_count if comment_count else None
 
+                video_type = (
+                    "Long Form" if list_type == "videos"
+                    else "Short" if list_type == "shorts"
+                    else "Livestream"
+                )
 
                 # Assign information to the video's dictionary
                 # Remember that the key is the video_id
-                videos[video_id]["Title"] = title
-                videos[video_id]["Upload Date"] = upload_date
-                videos[video_id]["Numeric Date"] = (int(upload_date.replace("-", "")) if upload_date else None)
-                video_type = "Long Form" if (list_type == "videos") else "Short" if (list_type == "shorts") else "Livestream" if (list_type == "livestreams") else "?"
-                videos[video_id]["Video Type"] = video_type
+                append_video_to_csv({
+                    "Video ID": video_id,
+                    "Title": title,
+                    "Upload Date": upload_date,
+                    "Numeric Date": int("".join(upload_date.split('-'))),
+                    "Video Type": video_type,
 
-                videos[video_id]["Duration"] = raw_duration
-                videos[video_id]["Duration in s"] = processed_duration    
+                    "Duration": raw_duration,
+                    "Duration in s": processed_duration,
 
-                videos[video_id]["View Count"] = view_count
-                videos[video_id]["Like Count"] = like_count
-                videos[video_id]["Comment Count"] = comment_count
+                    "View Count": view_count,
+                    "Like Count": like_count,
+                    "Comment Count": comment_count
+                }, handle, video_type)
 
                 # Dictionary addition of one video iteration:
                 # {"dQw4w9WgXcQ": {"Title": "Rick Astley - Never Gonna Give You Up (Official Music Video)", "Upload Date": "2009-10-25", ...}, ...}

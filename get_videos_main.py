@@ -8,10 +8,10 @@ from api_scripts.uploads_playlist_getter import get_uploads_playlist_id
 from api_scripts.video_id_getter import get_video_ids
 from api_scripts.video_info_getter import get_videos_info
 from output_scripts.info_outputter import output_info
-from output_scripts.dict_to_csv import create_video_csv
+from output_scripts.make_csv_file import create_video_csv
 
 # Channel to scrape
-handle = "@torontoraptors"
+handle = "@dudeperfect"
 # videos (long form), shorts, livestreams, all_uploads 
 video_type = "all_uploads"
 
@@ -36,9 +36,10 @@ print(video_ids)
 
 print("hey")
 # Get the information for each video
-video_info = get_videos_info(video_ids)
+video_info = get_videos_info(video_ids,handle)
 # Output {'Video ID': {'Title': 'My Video', 'Upload Date': '2025-04-30', ...}, ...}
 
+exit()
 # Sorting videos by date uploaded
 # Needed because shorts and uploads are separated
 # item is a key value pair, index 1 is the value, 'Numeric Date' is the desired sorting attribute
