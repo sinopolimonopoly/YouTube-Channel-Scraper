@@ -78,35 +78,45 @@ def get_videos_info(video_ids):
                     else:
                         comment_count = "Disabled"
 
-                    # Assign information to the video's dictionary
-                    # Remember that the key is the video_id
-                    videos[video_id]["Title"] = title
-                    videos[video_id]["Upload Date"] = upload_date
-                    videos[video_id]["Numeric Date"] = int("".join(upload_date.split('-')))
-                    video_type = "Long Form" if (list_type == "videos") else "Short" if (list_type == "shorts") else "Livestream" if (list_type == "livestreams") else "?"
-                    videos[video_id]["Video Type"] = video_type
-
-                    videos[video_id]["Duration"] = raw_duration
-                    videos[video_id]["Duration in s"] = processed_duration    
-
-                    videos[video_id]["View Count"] = view_count
-                    videos[video_id]["Like Count"] = like_count
-                    videos[video_id]["Comment Count"] = comment_count
-
-                    # Dictionary addition of one video iteration:
-                    # {"dQw4w9WgXcQ": {"Title": "Rick Astley - Never Gonna Give You Up (Official Music Video)", "Upload Date": "2009-10-25", ...}, ...}
-                
+                  
                 # Error handling if nonexistent key is pulled from
                 except KeyError as e:
                     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                     print(e)
                     print(f"Video Item: {item}")
-                    exit()
+
+                    title = title if title else None
+                    upload_date = upload_date if upload_date else None
+                    raw_duration = raw_duration if raw_duration else None
+                    processed_duration = processed_duration if processed_duration else None
+                    view_count = view_count if view_count else None
+                    like_count = like_count if like_count else None
+                    comment_count = comment_count if comment_count else None
+
+
+                # Assign information to the video's dictionary
+                # Remember that the key is the video_id
+                videos[video_id]["Title"] = title
+                videos[video_id]["Upload Date"] = upload_date
+                videos[video_id]["Numeric Date"] = (int(upload_date.replace("-", "")) if upload_date else None)
+                video_type = "Long Form" if (list_type == "videos") else "Short" if (list_type == "shorts") else "Livestream" if (list_type == "livestreams") else "?"
+                videos[video_id]["Video Type"] = video_type
+
+                videos[video_id]["Duration"] = raw_duration
+                videos[video_id]["Duration in s"] = processed_duration    
+
+                videos[video_id]["View Count"] = view_count
+                videos[video_id]["Like Count"] = like_count
+                videos[video_id]["Comment Count"] = comment_count
+
+                # Dictionary addition of one video iteration:
+                # {"dQw4w9WgXcQ": {"Title": "Rick Astley - Never Gonna Give You Up (Official Music Video)", "Upload Date": "2009-10-25", ...}, ...}
+                
 
 
     print("Video Get ID Function Done Successfully") 
         
-    return videos
+    return videos 
 
 # To convert duration (2M30S) to seconds (150S) 
 def process_duration(raw_duration, vid_item):

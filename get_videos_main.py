@@ -1,6 +1,8 @@
 import sys
 sys.stdout.reconfigure(encoding='utf-8')
 
+from collections import defaultdict
+
 from api_scripts.channel_id_getter import get_channel_id
 from api_scripts.uploads_playlist_getter import get_uploads_playlist_id
 from api_scripts.video_id_getter import get_video_ids
@@ -9,7 +11,7 @@ from output_scripts.info_outputter import output_info
 from output_scripts.dict_to_csv import create_video_csv
 
 # Channel to scrape
-handle = "@torontofc"
+handle = "@torontoraptors"
 # videos (long form), shorts, livestreams, all_uploads 
 video_type = "all_uploads"
 
@@ -25,11 +27,14 @@ if not channel_id:
 channel_uploads_playlist = get_uploads_playlist_id(channel_id, video_type)
 # Output -> {'video type': 'playlist ID'}
 
+print("hi")
 # Get the ids of all the videos in the playlist(s)
 video_ids = get_video_ids(channel_uploads_playlist)
 # Output {'video type': [List of ids]}
 print(video_ids)
 
+
+print("hey")
 # Get the information for each video
 video_info = get_videos_info(video_ids)
 # Output {'Video ID': {'Title': 'My Video', 'Upload Date': '2025-04-30', ...}, ...}
