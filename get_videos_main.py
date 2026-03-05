@@ -3,17 +3,24 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 from collections import defaultdict
 
+from output_scripts.check_for_csv import check_if_csv_exists
+from output_scripts.create_csv_file import create_output_csv
 from api_scripts.channel_id_getter import get_channel_id
 from api_scripts.uploads_playlist_getter import get_uploads_playlist_id
 from api_scripts.video_id_getter import get_video_ids
 from api_scripts.video_info_getter import get_videos_info
 from output_scripts.info_outputter import output_info
-from output_scripts.make_csv_file import create_video_csv
 
-# Channel to scrape
-handle = "@dudeperfect"
+handle = "@torontoraptors"
 # videos (long form), shorts, livestreams, all_uploads 
 video_type = "all_uploads"
+
+csv_exists = check_if_csv_exists(handle, video_type)
+if csv_exists:
+    print("CSV file already exists")
+
+else:
+    file_path = create_output_csv(handle, video_type)
 
 # Get channel ID
 channel_id = get_channel_id(handle)
@@ -36,10 +43,11 @@ print(video_ids)
 
 print("hey")
 # Get the information for each video
-video_info = get_videos_info(video_ids,handle)
+video_info = get_videos_info(video_ids,file_path)
 # Output {'Video ID': {'Title': 'My Video', 'Upload Date': '2025-04-30', ...}, ...}
 
 exit()
+print("hello")
 # Sorting videos by date uploaded
 # Needed because shorts and uploads are separated
 # item is a key value pair, index 1 is the value, 'Numeric Date' is the desired sorting attribute

@@ -4,13 +4,13 @@ from collections import defaultdict
 import requests
 import os
 
-from output_scripts.make_csv_file import append_video_to_csv
+from output_scripts.append_to_csv import append_video_to_csv
 
 
 load_dotenv()
 api_key = os.getenv("API_KEY")
 
-def get_videos_info(video_ids,handle):
+def get_videos_info(video_ids,file_path):
     # Defaultdict allows dictionary keys to be created while they are first being assigned
     # Calling videos["Hello"] Will create a new key 'Hello' with a value of an empty dictionary
         # -> {"Hello": {}}
@@ -63,8 +63,7 @@ def get_videos_info(video_ids,handle):
                     video_id = item.get("id")  # id is NOT inside snippet
                     title = snippet.get("title")
 
-                    published_at = snippet.get("publishedAt")
-                    upload_date = published_at[:10] if published_at else None
+                    upload_date = snippet.get("publishedAt")[0:10]
 
                     live_status = snippet.get("liveBroadcastContent")
 
@@ -134,7 +133,7 @@ def get_videos_info(video_ids,handle):
                     "View Count": view_count,
                     "Like Count": like_count,
                     "Comment Count": comment_count
-                }, handle, video_type)
+                }, file_path)
 
                 # Dictionary addition of one video iteration:
                 # {"dQw4w9WgXcQ": {"Title": "Rick Astley - Never Gonna Give You Up (Official Music Video)", "Upload Date": "2009-10-25", ...}, ...}
