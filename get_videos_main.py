@@ -11,9 +11,9 @@ from api_scripts.video_id_getter import get_video_ids
 from api_scripts.video_info_getter import get_videos_info
 from output_scripts.info_outputter import output_info
 
-handle = "@torontoraptors"
+handle = "@maxthemeatguy"
 # videos (long form), shorts, livestreams, all_uploads 
-video_type = "all_uploads"
+video_type = "shorts"
 
 csv_exists = check_if_csv_exists(handle, video_type)
 if csv_exists:
